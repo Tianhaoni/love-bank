@@ -126,6 +126,12 @@
       .options button:active {
         transform: scale(0.95);
       }
+      /* 多选选中状态 */
+      .options button.selected {
+        background: rgba(255, 215, 0, 0.25);
+        border-color: #ffd700;
+        box-shadow: 0 0 16px rgba(255, 215, 0, 0.2);
+      }
       .input-area {
         display: flex;
         flex-direction: column;
@@ -259,45 +265,54 @@
       // 🎯 在这里修改你的题目和答案
       // ================================================================
       const LEVELS = [
-        // 第1关：第一次约会城市（选择题）
-        {
-          type: "choice",
-          title: "第 1 关 · 初遇回忆",
-          question: "我们第一次约会是在哪个城市？",
-          options: ["上海", "多伦多", "温哥华", "成都"], // 👈 可修改选项
-          correct: "温哥华", // 👈 改成你们的实际答案（必须完全匹配）
-          loveMsg: "🌹 那是我们故事开始的地方。",
-        },
-        // 第2关：最喜欢的歌
+        // 第1关：初次见面地点（输入题）
         {
           type: "input",
-          title: "第 2 关 · 音乐记忆",
+          title: "第 1 关 · 初遇之地",
+          question: "我们第一次见面是在哪里？",
+          hint: "💡 提示：名字来自一位日本学者。",
+          correct: "nitobe",
+          loveMsg: "🌸 那个花园见证了我们故事的开始。",
+        },
+        // 第2关：第一次约会看到了什么（多选题）
+        {
+          type: "multi",
+          title: "第 2 关 · 初遇回忆",
+          question: "我们第一次约会看到了什么？",
+          options: ["🐷", "🦦", "🦭", "🦁", "🐟"],
+          correct: ["🦦", "🦭", "🐟"], // 多选答案
+          loveMsg: "🦦 那些可爱的动物们，也见证了我们的第一次约会。",
+        },
+        // 第3关：最喜欢的歌
+        {
+          type: "input",
+          title: "第 3 关 · 音乐记忆",
           question: "我们最喜欢的一首歌的中文名字是什么？",
           hint: "💡 提示：是日语的哦。",
-          correct: "单相思", // 👈 答案固定
+          correct: "单相思",
           loveMsg: "🎵 每次听到这首歌，都会想起你。",
         },
-        // 第3关：纪念日
+        // 第4关：纪念日
         {
           type: "choice",
-          title: "第 3 关 · 重要日子",
+          title: "第 4 关 · 重要日子",
           question: "我们的结婚纪念日是哪一天？",
           options: ["7月15日", "8月20日", "9月10日", "10月1日"],
-          correct: "7月15日", // 👈 改成你们的纪念日
+          correct: "7月15日",
           loveMsg: "🎂 这一天，我们许下了永远的承诺。",
         },
-        // 第4关：二进制解码
+        // 第5关：二进制解码
         {
           type: "input",
-          title: "第 4 关 · 二进制密语",
+          title: "第 5 关 · 二进制密语",
           question:
             "下面这串二进制数字，转换成文字后，是我们之间最常说的一个词：",
           code: "01101100 01101111 01110110 01100101",
-          hint: "💡 提示：每 8 位二进制 = 1 个 ASCII 字符。",
+          hint: "💡 提示：想想我们的cpsc317。回忆一下学校的回忆！",
           correct: "love",
           loveMsg: "❤️ 是的，就是“爱”，我们之间的一切。",
         },
-        // 第5关：最终链接（直接显示，无需输入）
+        // 第6关：最终链接
         {
           type: "final",
           title: "🎉 最后一关 · 解锁 Love Bank",
@@ -307,7 +322,7 @@
       ];
 
       // ================================================================
-      // 游戏引擎（不用改）
+      // 游戏引擎
       // ================================================================
       let currentLevel = 0;
       const feedbackEl = document.getElementById("feedback");
@@ -344,13 +359,22 @@
             html += `<button class="choice-btn" data-value="${opt}">${opt}</button>`;
           });
           html += `</div>`;
+        } else if (level.type === "multi") {
+          // 多选：显示可切换的选项按钮 + 确认按钮
+          html += `<div class="options" id="multiOptions">`;
+          level.options.forEach((opt) => {
+            html += `<button class="multi-option" data-value="${opt}">${opt}</button>`;
+          });
+          html += `</div>`;
+          html += `<div class="input-area">
+                <button class="btn-primary" id="multiSubmitBtn">确 认</button>
+            </div>`;
         } else if (level.type === "input") {
           html += `<div class="input-area">
                 <input type="text" id="answerInput" placeholder="输入你的答案..." autofocus />
                 <button class="btn-primary" id="submitBtn">确 认</button>
             </div>`;
         } else if (level.type === "final") {
-          // 最后一关直接显示链接
           html += `<div style="margin: 20px 0;">
                 <a href="https://tianhaoni.github.io/love-bank/love/love-bank.html" class="final-link">💕 进入 Love Bank 💕</a>
             </div>`;
@@ -363,13 +387,10 @@
         html += `</div>`;
         questionArea.innerHTML = html;
 
-        // 清除旧反馈
         feedbackEl.textContent = "";
         romanticMsgEl.textContent = "";
 
-        // 如果是 final 关卡，直接结束
         if (level.type === "final") {
-          // 标记所有圆点为完成
           document
             .querySelectorAll(".dot")
             .forEach((d) => d.classList.add("done"));
@@ -378,6 +399,7 @@
 
         const levelFeedback = document.getElementById("levelFeedback");
 
+        // ----- 单选（choice）处理 -----
         if (level.type === "choice") {
           document.querySelectorAll(".choice-btn").forEach((btn) => {
             btn.addEventListener("click", function () {
@@ -385,7 +407,36 @@
               checkAnswer(userAnswer);
             });
           });
-        } else {
+        }
+
+        // ----- 多选（multi）处理 -----
+        if (level.type === "multi") {
+          const multiOptions = document.querySelectorAll(".multi-option");
+          const selectedValues = new Set();
+
+          multiOptions.forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const val = this.dataset.value;
+              if (selectedValues.has(val)) {
+                selectedValues.delete(val);
+                this.classList.remove("selected");
+              } else {
+                selectedValues.add(val);
+                this.classList.add("selected");
+              }
+            });
+          });
+
+          document
+            .getElementById("multiSubmitBtn")
+            .addEventListener("click", function () {
+              const userAnswers = Array.from(selectedValues);
+              checkAnswer(userAnswers);
+            });
+        }
+
+        // ----- 输入题（input）处理 -----
+        if (level.type === "input") {
           const input = document.getElementById("answerInput");
           const submitBtn = document.getElementById("submitBtn");
           function handleSubmit() {
@@ -399,9 +450,27 @@
           setTimeout(() => input.focus(), 100);
         }
 
+        // ===== 统一的答案检查函数 =====
         function checkAnswer(userAnswer) {
-          const correct = level.correct;
-          if (userAnswer === correct) {
+          let isCorrect = false;
+
+          if (level.type === "multi") {
+            // 多选：比较两个数组是否相等（顺序无关）
+            const correctArr = level.correct.slice().sort();
+            const userArr = userAnswer.slice().sort();
+            isCorrect =
+              userArr.length === correctArr.length &&
+              userArr.every((val, idx) => val === correctArr[idx]);
+          } else if (level.type === "input") {
+            // 输入题：忽略大小写
+            isCorrect =
+              userAnswer.toLowerCase() === level.correct.toLowerCase();
+          } else {
+            // 单选：精确匹配
+            isCorrect = userAnswer === level.correct;
+          }
+
+          if (isCorrect) {
             levelFeedback.style.color = "#7dffb3";
             levelFeedback.textContent =
               "✅ 正确！" + (level.loveMsg ? " " + level.loveMsg : "");
