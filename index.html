@@ -1,0 +1,428 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <title>🔐 寻宝之旅 · 我们的秘密</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        font-family: "ZCOOL KuaiLe", "Comic Sans MS", cursive;
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background:
+          radial-gradient(
+            circle at 20% 20%,
+            rgba(255, 120, 180, 0.3),
+            transparent 40%
+          ),
+          radial-gradient(
+            circle at 80% 70%,
+            rgba(255, 200, 230, 0.2),
+            transparent 40%
+          ),
+          linear-gradient(135deg, #0f1022, #1a1230, #29152f);
+        color: white;
+        padding: 20px;
+      }
+      .container {
+        max-width: 700px;
+        width: 100%;
+        background: rgba(255, 255, 255, 0.08);
+        backdrop-filter: blur(24px);
+        -webkit-backdrop-filter: blur(24px);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        border-radius: 40px;
+        padding: 40px 32px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+        text-align: center;
+      }
+      h1 {
+        font-size: 2.4rem;
+        font-weight: 400;
+        letter-spacing: 2px;
+        margin-bottom: 4px;
+        color: #ffd700;
+        text-shadow: 0 0 30px rgba(255, 215, 0, 0.15);
+      }
+      .subtitle {
+        opacity: 0.7;
+        font-size: 1.1rem;
+        margin-bottom: 20px;
+      }
+      .level-indicator {
+        display: flex;
+        justify-content: center;
+        gap: 10px;
+        margin-bottom: 20px;
+      }
+      .dot {
+        width: 14px;
+        height: 14px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.15);
+        transition: 0.3s;
+      }
+      .dot.active {
+        background: #ffd700;
+        box-shadow: 0 0 16px rgba(255, 215, 0, 0.5);
+      }
+      .dot.done {
+        background: #7dffb3;
+      }
+      .question-box {
+        background: rgba(255, 255, 255, 0.06);
+        border-radius: 24px;
+        padding: 28px 20px 24px;
+        margin: 12px 0 16px;
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        min-height: 260px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+      }
+      .question-text {
+        font-size: 1.3rem;
+        line-height: 1.8;
+        margin-bottom: 12px;
+      }
+      .options {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        justify-content: center;
+        margin: 12px 0 8px;
+      }
+      .options button {
+        padding: 10px 24px;
+        border: 2px solid rgba(255, 255, 255, 0.15);
+        border-radius: 40px;
+        background: rgba(255, 255, 255, 0.06);
+        color: white;
+        font-size: 1.1rem;
+        font-family: inherit;
+        cursor: pointer;
+        transition: 0.2s;
+        flex: 0 1 auto;
+        min-width: 80px;
+      }
+      .options button:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: #ffd700;
+      }
+      .options button:active {
+        transform: scale(0.95);
+      }
+      .input-area {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+        margin-top: 8px;
+      }
+      .input-area input {
+        width: 100%;
+        max-width: 320px;
+        padding: 14px 20px;
+        border-radius: 60px;
+        border: none;
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+        font-size: 1.1rem;
+        text-align: center;
+        outline: 2px solid rgba(255, 255, 255, 0.08);
+        transition: 0.2s;
+        font-family: inherit;
+      }
+      .input-area input:focus {
+        outline-color: #ffd700;
+        background: rgba(255, 255, 255, 0.15);
+      }
+      .input-area input::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+      }
+      .btn-primary {
+        padding: 12px 36px;
+        border: none;
+        border-radius: 60px;
+        background: rgba(255, 215, 0, 0.2);
+        color: white;
+        font-size: 1.2rem;
+        font-family: inherit;
+        cursor: pointer;
+        transition: 0.3s;
+        border: 1px solid rgba(255, 215, 0, 0.2);
+      }
+      .btn-primary:hover {
+        background: rgba(255, 215, 0, 0.35);
+        transform: scale(1.02);
+      }
+      .btn-primary:active {
+        transform: scale(0.95);
+      }
+      .feedback {
+        margin-top: 16px;
+        font-size: 1.1rem;
+        min-height: 2.5rem;
+        color: #7dffb3;
+      }
+      .feedback.error {
+        color: #ff8a8a;
+      }
+      .code-block {
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 16px;
+        padding: 14px 18px;
+        font-family: "Courier New", monospace;
+        font-size: 1rem;
+        text-align: left;
+        white-space: pre-wrap;
+        word-break: break-all;
+        margin: 8px auto 12px;
+        border-left: 4px solid #ffd700;
+        color: #d4e6ff;
+        max-width: 90%;
+        display: inline-block;
+      }
+      .final-link {
+        display: inline-block;
+        margin-top: 16px;
+        padding: 16px 32px;
+        background: rgba(255, 120, 180, 0.2);
+        border: 2px solid #ff9ac7;
+        border-radius: 60px;
+        color: white;
+        font-size: 1.3rem;
+        text-decoration: none;
+        transition: 0.3s;
+        font-family: inherit;
+        cursor: pointer;
+      }
+      .final-link:hover {
+        background: rgba(255, 120, 180, 0.35);
+        transform: scale(1.04);
+      }
+      .romantic-msg {
+        margin: 8px 0 4px;
+        font-size: 1rem;
+        opacity: 0.8;
+        color: #ffb6c1;
+      }
+      .hint-text {
+        font-size: 0.9rem;
+        opacity: 0.5;
+        margin-top: 8px;
+      }
+      @media (max-width: 600px) {
+        .container {
+          padding: 28px 16px;
+        }
+        h1 {
+          font-size: 2rem;
+        }
+        .question-text {
+          font-size: 1.1rem;
+        }
+        .options button {
+          padding: 8px 16px;
+          font-size: 1rem;
+          min-width: 60px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="app">
+      <div class="level-indicator" id="dots"></div>
+      <h1>🔐 寻宝之旅</h1>
+      <p class="subtitle">✨ 每一关都藏着一个关于我们的回忆 ✨</p>
+      <div id="questionArea"></div>
+      <div class="feedback" id="feedback"></div>
+      <div class="romantic-msg" id="romanticMsg"></div>
+    </div>
+
+    <script>
+      // ================================================================
+      // 🎯 在这里修改你的题目和答案
+      // ================================================================
+      const LEVELS = [
+        // 第1关：第一次约会城市（选择题）
+        {
+          type: "choice",
+          title: "第 1 关 · 初遇回忆",
+          question: "我们第一次约会是在哪个城市？",
+          options: ["上海", "多伦多", "温哥华", "成都"], // 👈 可修改选项
+          correct: "温哥华", // 👈 改成你们的实际答案（必须完全匹配）
+          loveMsg: "🌹 那是我们故事开始的地方。",
+        },
+        // 第2关：最喜欢的歌
+        {
+          type: "input",
+          title: "第 2 关 · 音乐记忆",
+          question: "我们最喜欢的一首歌的中文名字是什么？",
+          hint: "💡 提示：是日语的哦。",
+          correct: "单相思", // 👈 答案固定
+          loveMsg: "🎵 每次听到这首歌，都会想起你。",
+        },
+        // 第3关：纪念日
+        {
+          type: "choice",
+          title: "第 3 关 · 重要日子",
+          question: "我们的结婚纪念日是哪一天？",
+          options: ["7月15日", "8月20日", "9月10日", "10月1日"],
+          correct: "7月15日", // 👈 改成你们的纪念日
+          loveMsg: "🎂 这一天，我们许下了永远的承诺。",
+        },
+        // 第4关：二进制解码
+        {
+          type: "input",
+          title: "第 4 关 · 二进制密语",
+          question:
+            "下面这串二进制数字，转换成文字后，是我们之间最常说的一个词：",
+          code: "01101100 01101111 01110110 01100101",
+          hint: "💡 提示：每 8 位二进制 = 1 个 ASCII 字符。",
+          correct: "love",
+          loveMsg: "❤️ 是的，就是“爱”，我们之间的一切。",
+        },
+        // 第5关：最终链接（直接显示，无需输入）
+        {
+          type: "final",
+          title: "🎉 最后一关 · 解锁 Love Bank",
+          question: "恭喜你通过所有关卡！\n点击下方按钮，进入我们的专属网站 💕",
+          loveMsg: "🎊 你找到了！这是只属于我们的 Love Bank。",
+        },
+      ];
+
+      // ================================================================
+      // 游戏引擎（不用改）
+      // ================================================================
+      let currentLevel = 0;
+      const feedbackEl = document.getElementById("feedback");
+      const romanticMsgEl = document.getElementById("romanticMsg");
+      const questionArea = document.getElementById("questionArea");
+      const dotsContainer = document.getElementById("dots");
+
+      function renderDots() {
+        dotsContainer.innerHTML = LEVELS.map(
+          (_, i) =>
+            `<span class="dot ${i === currentLevel ? "active" : ""} ${i < currentLevel ? "done" : ""}"></span>`,
+        ).join("");
+      }
+
+      function renderLevel(index) {
+        const level = LEVELS[index];
+        if (!level) return;
+        renderDots();
+
+        let html = `<div class="question-box">`;
+        html += `<h3 style="font-weight:400; margin-bottom:8px;">${level.title}</h3>`;
+        html += `<div class="question-text">${level.question.replace(/\n/g, "<br>")}</div>`;
+
+        if (level.code) {
+          html += `<div class="code-block">${level.code}</div>`;
+        }
+        if (level.hint) {
+          html += `<div class="hint-text">${level.hint}</div>`;
+        }
+
+        if (level.type === "choice") {
+          html += `<div class="options">`;
+          level.options.forEach((opt) => {
+            html += `<button class="choice-btn" data-value="${opt}">${opt}</button>`;
+          });
+          html += `</div>`;
+        } else if (level.type === "input") {
+          html += `<div class="input-area">
+                <input type="text" id="answerInput" placeholder="输入你的答案..." autofocus />
+                <button class="btn-primary" id="submitBtn">确 认</button>
+            </div>`;
+        } else if (level.type === "final") {
+          // 最后一关直接显示链接
+          html += `<div style="margin: 20px 0;">
+                <a href="https://tianhaoni.github.io/love-bank/love/love-bank.html" class="final-link">💕 进入 Love Bank 💕</a>
+            </div>`;
+          if (level.loveMsg) {
+            html += `<div style="font-size:1.0rem; color: #ffb6c1;">${level.loveMsg}</div>`;
+          }
+        }
+
+        html += `<div id="levelFeedback" style="margin-top:12px; min-height:2rem; color:#ffd700;"></div>`;
+        html += `</div>`;
+        questionArea.innerHTML = html;
+
+        // 清除旧反馈
+        feedbackEl.textContent = "";
+        romanticMsgEl.textContent = "";
+
+        // 如果是 final 关卡，直接结束
+        if (level.type === "final") {
+          // 标记所有圆点为完成
+          document
+            .querySelectorAll(".dot")
+            .forEach((d) => d.classList.add("done"));
+          return;
+        }
+
+        const levelFeedback = document.getElementById("levelFeedback");
+
+        if (level.type === "choice") {
+          document.querySelectorAll(".choice-btn").forEach((btn) => {
+            btn.addEventListener("click", function () {
+              const userAnswer = this.dataset.value;
+              checkAnswer(userAnswer);
+            });
+          });
+        } else {
+          const input = document.getElementById("answerInput");
+          const submitBtn = document.getElementById("submitBtn");
+          function handleSubmit() {
+            const userAnswer = input.value.trim();
+            checkAnswer(userAnswer);
+          }
+          submitBtn.addEventListener("click", handleSubmit);
+          input.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") handleSubmit();
+          });
+          setTimeout(() => input.focus(), 100);
+        }
+
+        function checkAnswer(userAnswer) {
+          const correct = level.correct;
+          if (userAnswer === correct) {
+            levelFeedback.style.color = "#7dffb3";
+            levelFeedback.textContent =
+              "✅ 正确！" + (level.loveMsg ? " " + level.loveMsg : "");
+            romanticMsgEl.textContent = level.loveMsg || "";
+            if (index < LEVELS.length - 1) {
+              setTimeout(() => {
+                currentLevel = index + 1;
+                renderLevel(currentLevel);
+              }, 1200);
+            }
+          } else {
+            levelFeedback.style.color = "#ff8a8a";
+            levelFeedback.textContent =
+              "❌ 再想想……" + (level.hint ? " 提示：" + level.hint : "");
+            feedbackEl.textContent = "";
+          }
+        }
+      }
+
+      // 启动
+      renderLevel(0);
+    </script>
+  </body>
+</html>
