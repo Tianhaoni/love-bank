@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta
       name="viewport"
-      content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=no"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
     />
     <title>Thomas ❤️ Alice - Love Bank</title>
 
@@ -12,14 +12,14 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
-    <!-- 引入可爱艺术字体 -->
+    <!-- 可爱艺术字体 -->
     <link
       href="https://fonts.googleapis.com/css2?family=ZCOOL+KuaiLe&display=swap"
       rel="stylesheet"
     />
 
     <style>
-      /* ===== 全局字体 ===== */
+      /* ===== 完整样式（与之前相同，只是增加了开屏相关样式） ===== */
       * {
         margin: 0;
         padding: 0;
@@ -45,7 +45,6 @@
         -webkit-tap-highlight-color: transparent;
         padding-top: 60px;
       }
-      /* 所有文字继承字体 */
       h1,
       h2,
       h3,
@@ -58,7 +57,6 @@
       .fortune-text {
         font-family: inherit;
       }
-
       .bg {
         position: fixed;
         inset: 0;
@@ -107,14 +105,13 @@
         font-size: 1.2rem;
       }
       #days {
-        font-size: 1.6rem;
-        font-weight: 400;
         margin-top: 12px;
-        background: rgba(255, 255, 255, 0.08);
         display: inline-block;
         padding: 8px 28px;
         border-radius: 40px;
         backdrop-filter: blur(4px);
+        background: rgba(255, 255, 255, 0.08);
+        min-width: 200px;
       }
       .grid {
         display: grid;
@@ -283,7 +280,7 @@
         display: none;
       }
 
-      /* ===== 通知横幅 ===== */
+      /* 通知横幅 */
       #notification {
         position: fixed;
         top: 12px;
@@ -322,7 +319,7 @@
         color: #ffb07d;
       }
 
-      /* ===== 愿望表格 ===== */
+      /* 愿望表格 */
       .wish-table-wrap {
         overflow-x: auto;
         margin-top: 8px;
@@ -386,7 +383,7 @@
         font-style: italic;
       }
 
-      /* ===== 动态背景 Canvas ===== */
+      /* 动态背景 Canvas */
       #dynamicBgCanvas {
         position: fixed;
         top: 0;
@@ -399,7 +396,46 @@
         display: block;
       }
 
-      /* ===== 全屏幸运签遮罩 ===== */
+      /* 用户切换按钮 */
+      .user-switcher {
+        position: absolute;
+        top: 20px;
+        right: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(8px);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 40px;
+        padding: 6px 16px 6px 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        cursor: pointer;
+        transition: 0.3s;
+        font-size: 0.95rem;
+        color: white;
+        user-select: none;
+      }
+      .user-switcher:hover {
+        background: rgba(255, 255, 255, 0.2);
+      }
+      .user-switcher .avatar {
+        display: inline-block;
+        width: 28px;
+        height: 28px;
+        border-radius: 50%;
+        background: rgba(255, 215, 0, 0.2);
+        text-align: center;
+        line-height: 28px;
+        font-weight: 400;
+        font-size: 0.8rem;
+        color: #ffd700;
+      }
+      .user-switcher .arrow {
+        font-size: 0.7rem;
+        opacity: 0.6;
+      }
+
+      /* ===== 开屏遮罩样式 ===== */
       #splashOverlay {
         position: fixed;
         inset: 0;
@@ -414,7 +450,7 @@
         transition: opacity 1s ease;
         opacity: 1;
         padding: 30px;
-        cursor: pointer; /* 点击背景跳过 */
+        cursor: pointer;
       }
       #splashOverlay.fade-out {
         opacity: 0;
@@ -430,7 +466,7 @@
         text-align: center;
         backdrop-filter: blur(10px);
         box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
-        pointer-events: auto; /* 卡片内部可交互 */
+        pointer-events: auto;
         cursor: default;
       }
       #splashOverlay .fortune-text {
@@ -491,58 +527,7 @@
         letter-spacing: 1px;
       }
 
-      /* ===== 用户切换按钮 ===== */
-      .user-switcher {
-        position: absolute;
-        top: 20px;
-        right: 20px;
-        background: rgba(255, 255, 255, 0.1);
-        backdrop-filter: blur(8px);
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        border-radius: 40px;
-        padding: 6px 16px 6px 12px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        cursor: pointer;
-        transition: 0.3s;
-        font-size: 0.95rem;
-        color: white;
-        user-select: none;
-      }
-      .user-switcher:hover {
-        background: rgba(255, 255, 255, 0.2);
-      }
-      .user-switcher .avatar {
-        display: inline-block;
-        width: 28px;
-        height: 28px;
-        border-radius: 50%;
-        background: rgba(255, 215, 0, 0.2);
-        text-align: center;
-        line-height: 28px;
-        font-weight: 400;
-        font-size: 0.8rem;
-        color: #ffd700;
-      }
-      .user-switcher .arrow {
-        font-size: 0.7rem;
-        opacity: 0.6;
-      }
-
-      /* ===== 响应式 ===== */
       @media (max-width: 600px) {
-        #splashOverlay .splash-card {
-          padding: 30px 20px;
-        }
-        #splashOverlay .fortune-text {
-          font-size: 1.4rem;
-        }
-        #splashOverlay .identity-buttons button {
-          padding: 10px 20px;
-          font-size: 1rem;
-          min-width: 80px;
-        }
         .user-switcher {
           top: 12px;
           right: 12px;
@@ -560,25 +545,27 @@
         }
         #days {
           font-size: 1.2rem;
-          padding: 4px 16px;
+          padding: 6px 16px;
         }
         .ticket {
           font-size: 2.8rem;
+        }
+        #splashOverlay .splash-card {
+          padding: 30px 20px;
+        }
+        #splashOverlay .fortune-text {
+          font-size: 1.4rem;
+        }
+        #splashOverlay .identity-buttons button {
+          padding: 10px 20px;
+          font-size: 1rem;
+          min-width: 80px;
         }
       }
     </style>
   </head>
   <body>
-    <!-- ===== 通知横幅 ===== -->
-    <div id="notification">💌 <span id="notifMsg">云端已连接</span></div>
-
-    <!-- ===== 动态背景 Canvas ===== -->
-    <canvas id="dynamicBgCanvas"></canvas>
-
-    <!-- ===== 背景浮动 ===== -->
-    <div class="bg"></div>
-
-    <!-- ===== 全屏幸运签遮罩 ===== -->
+    <!-- ===== 开屏遮罩 ===== -->
     <div id="splashOverlay">
       <div class="splash-card">
         <div class="splash-sub">✨ 今日幸运签 ✨</div>
@@ -597,7 +584,16 @@
       </div>
     </div>
 
-    <div class="container">
+    <!-- ===== 通知横幅 ===== -->
+    <div id="notification">💌 <span id="notifMsg">云端已连接</span></div>
+
+    <!-- ===== 动态背景 Canvas ===== -->
+    <canvas id="dynamicBgCanvas"></canvas>
+
+    <!-- ===== 背景浮动 ===== -->
+    <div class="bg"></div>
+
+    <div class="container" id="mainApp" style="display: none">
       <div class="glass hero">
         <!-- 用户切换按钮 -->
         <div class="user-switcher" id="userSwitcher">
@@ -608,7 +604,7 @@
 
         <h1>❤️ Thomas & Alice ❤️</h1>
         <p class="subtitle">Our Love Bank</p>
-        <p id="days"></p>
+        <div id="days"></div>
         <p id="cloudStatus" class="cloud-status">☁️ 连接中...</p>
       </div>
 
@@ -706,6 +702,11 @@
         </p>
         <input id="redeemCode" placeholder="输入兑换码" />
         <div style="margin: 6px 0 14px; opacity: 0.6; font-size: 0.9rem">
+          💡 测试码：<strong style="color: #fff">LOVE2026</strong> (3张) /
+          <strong style="color: #fff">HAPPY2026</strong> (5张) <br /><span
+            style="font-size: 0.7rem; opacity: 0.5"
+          >
+            兑换码已从云端同步，可随时添加新码<br />
             每个兑换码只能使用一次
           </span>
         </div>
@@ -720,37 +721,35 @@
 
     <script>
       // ================================================================
-      // Firebase 配置
+      // 开屏逻辑（身份选择 + 幸运签）
       // ================================================================
-      const FIREBASE_CONFIG = {
-        apiKey: "AIzaSyCgpULyqrenPXKGhmqp4q29AKs3sMPriYw",
-        authDomain: "love-bank-60a72.firebaseapp.com",
-        databaseURL: "https://love-bank-60a72-default-rtdb.firebaseio.com",
-        projectId: "love-bank-60a72",
-        storageBucket: "love-bank-60a72.firebasestorage.app",
-        messagingSenderId: "960573822519",
-        appId: "1:960573822519:web:a4a00a8366c4e5ec0151b2",
-        measurementId: "G-EJ92BK8BVZ",
-      };
-      // ================================================================
+      const FORTUNES = [
+        "✨ 你的微笑是我每天最期待的风景。",
+        "💕 今天你比昨天更让我心动。",
+        "🌟 与你在一起的每一天都是礼物。",
+        "🌙 月光再美，也不及你眼眸的温柔。",
+        "🌸 愿你的心情如花开般灿烂。",
+        "🌻 你是我的太阳，温暖而明亮。",
+        "🍀 幸运的是，我们彼此拥有。",
+        "🌈 风雨过后，我们的彩虹更绚烂。",
+        "🎵 你是我心中永远的单曲循环。",
+        "💖 爱你，是我做过最正确的事。",
+        "🌹 你值得世间所有的美好。",
+        "⭐ 你的存在让我的世界闪闪发光。",
+        "☀️ 今天也要像阳光一样明媚哦！",
+        "🌊 我对你的爱，如潮水般永不褪去。",
+        "🍫 你是我最甜蜜的巧克力。",
+      ];
 
-      const ANNIVERSARY_DATE = new Date(2026, 6, 15);
-
-      // ===== 数据对象 =====
-      let data = {
-        thomas: 1,
-        baby: 2,
-        history: ["❤️ 网站创建成功，爱意满满"],
-        wishes: [],
-      };
-
-      // ===== 当前用户 =====
+      let countdownInterval = null;
+      let splashFadeTimeout = null;
+      let isSplashFading = false;
       let currentUser = "thomas";
 
-      // ===== 设备指纹 =====
+      // 设备指纹（用于存储身份）
       function getDeviceId() {
-        const stored = localStorage.getItem("loveBankDeviceId");
-        if (stored) return stored;
+        let id = localStorage.getItem("loveBankDeviceId");
+        if (id) return id;
         const components = [
           navigator.userAgent,
           screen.width + "x" + screen.height,
@@ -779,18 +778,16 @@
           hashVal = (hashVal << 5) - hashVal + char;
           hashVal = hashVal & hashVal;
         }
-        const deviceId =
+        id =
           "device_" +
           Math.abs(hashVal).toString(36) +
           "_" +
           Date.now().toString(36);
-        localStorage.setItem("loveBankDeviceId", deviceId);
-        return deviceId;
+        localStorage.setItem("loveBankDeviceId", id);
+        return id;
       }
-
       const deviceId = getDeviceId();
 
-      // ===== 加载设备绑定的用户 =====
       function loadUserFromDevice() {
         const key = "loveBankUser_" + deviceId;
         const saved = localStorage.getItem(key);
@@ -806,6 +803,7 @@
           }
         }
         localStorage.setItem("loveBankUser", currentUser);
+        return currentUser;
       }
 
       function saveUserToDevice(user) {
@@ -813,38 +811,118 @@
         localStorage.setItem(key, user);
         localStorage.setItem("loveBankUser", user);
         currentUser = user;
-        updateUserUI();
       }
 
-      function updateUserUI() {
-        const label = currentUser === "thomas" ? "Thomas" : "Alice";
-        const avatar = currentUser === "thomas" ? "T" : "A";
-        document.getElementById("userNameDisplay").textContent = label;
-        document.getElementById("userAvatar").textContent = avatar;
-        document.getElementById("wishUserDisplay").textContent = label;
-        document.getElementById("redeemUserDisplay").textContent = label;
-      }
+      // 开屏显示
+      function showSplash() {
+        const overlay = document.getElementById("splashOverlay");
+        const fortuneEl = document.getElementById("splashFortuneText");
+        const countdownEl = document.getElementById("splashCountdown");
 
-      function switchUser() {
-        const currentLabel = currentUser === "thomas" ? "Thomas" : "Alice";
-        const nextLabel = currentUser === "thomas" ? "Alice" : "Thomas";
-        if (
-          confirm(
-            `当前使用者：${currentLabel}\n点击确定切换为 ${nextLabel}，取消则不变。`,
-          )
-        ) {
-          const newUser = currentUser === "thomas" ? "baby" : "thomas";
-          saveUserToDevice(newUser);
-          showNotification(
-            `👤 已切换为 ${newUser === "thomas" ? "Thomas" : "Alice"}`,
-          );
-          render();
+        const randomIndex = Math.floor(Math.random() * FORTUNES.length);
+        fortuneEl.textContent = FORTUNES[randomIndex];
+
+        const savedUser = loadUserFromDevice();
+        if (savedUser === "thomas") {
+          document.getElementById("identityThomas").classList.add("selected");
+          document.getElementById("identityAlice").classList.remove("selected");
+        } else {
+          document.getElementById("identityAlice").classList.add("selected");
+          document
+            .getElementById("identityThomas")
+            .classList.remove("selected");
         }
+
+        overlay.style.opacity = "1";
+        overlay.style.pointerEvents = "auto";
+
+        // 倒计时
+        let seconds = 5;
+        countdownEl.textContent = seconds;
+        clearInterval(countdownInterval);
+        countdownInterval = setInterval(() => {
+          seconds--;
+          countdownEl.textContent = seconds;
+          if (seconds <= 0) {
+            clearInterval(countdownInterval);
+            fadeOutSplash();
+          }
+        }, 1000);
+
+        // 身份按钮
+        document.getElementById("identityThomas").onclick = function () {
+          clearInterval(countdownInterval);
+          selectIdentity("thomas");
+        };
+        document.getElementById("identityAlice").onclick = function () {
+          clearInterval(countdownInterval);
+          selectIdentity("baby");
+        };
+
+        // 点击背景跳过
+        overlay.addEventListener("click", function (e) {
+          if (e.target === overlay) {
+            clearInterval(countdownInterval);
+            fadeOutSplash();
+          }
+        });
+      }
+
+      function selectIdentity(user) {
+        clearTimeout(splashFadeTimeout);
+        saveUserToDevice(user);
+        document.getElementById("identityThomas").classList.remove("selected");
+        document.getElementById("identityAlice").classList.remove("selected");
+        if (user === "thomas") {
+          document.getElementById("identityThomas").classList.add("selected");
+        } else {
+          document.getElementById("identityAlice").classList.add("selected");
+        }
+        setTimeout(() => {
+          fadeOutSplash();
+        }, 300);
+      }
+
+      function fadeOutSplash() {
+        if (isSplashFading) return;
+        isSplashFading = true;
+        const overlay = document.getElementById("splashOverlay");
+        overlay.classList.add("fade-out");
+        if (splashFadeTimeout) clearTimeout(splashFadeTimeout);
+        splashFadeTimeout = setTimeout(() => {
+          overlay.style.display = "none";
+          // 显示主界面
+          document.getElementById("mainApp").style.display = "block";
+          // 启动主应用
+          if (typeof initMain === "function") {
+            initMain();
+          }
+        }, 1000);
       }
 
       // ================================================================
-      // Firebase 初始化
+      // 主应用（与之前相同，只是将 init 改为 initMain 以便在 splash 后调用）
       // ================================================================
+
+      // Firebase 配置
+      const FIREBASE_CONFIG = {
+        apiKey: "AIzaSyCgpULyqrenPXKGhmqp4q29AKs3sMPriYw",
+        authDomain: "love-bank-60a72.firebaseapp.com",
+        databaseURL: "https://love-bank-60a72-default-rtdb.firebaseio.com",
+        projectId: "love-bank-60a72",
+        storageBucket: "love-bank-60a72.firebasestorage.app",
+        messagingSenderId: "960573822519",
+        appId: "1:960573822519:web:a4a00a8366c4e5ec0151b2",
+        measurementId: "G-EJ92BK8BVZ",
+      };
+
+      let data = {
+        thomas: 1,
+        baby: 2,
+        history: ["❤️ 网站创建成功，爱意满满"],
+        wishes: [],
+      };
+
       let db = null;
       let isCloudReady = false;
       let isRemoteUpdate = false;
@@ -873,7 +951,6 @@
           "cloud-status offline";
       }
 
-      // ===== localStorage 读写 =====
       function loadLocal() {
         try {
           const raw = localStorage.getItem("loveBank");
@@ -900,7 +977,6 @@
         } catch (e) {}
       }
 
-      // ===== 云端同步 =====
       function syncToCloud() {
         if (!isCloudReady || !db) return;
         try {
@@ -923,7 +999,6 @@
         }
       }
 
-      // ===== 监听云端 =====
       function listenCloud() {
         if (!isCloudReady || !db) return;
         try {
@@ -968,7 +1043,6 @@
         }
       }
 
-      // ===== 通知 =====
       let notifTimer = null;
       function showNotification(msg) {
         const el = document.getElementById("notification");
@@ -981,7 +1055,6 @@
         }, 4000);
       }
 
-      // ===== 核心修改 =====
       function mutateData(newData, actionLog) {
         if (isRemoteUpdate) return;
         data = newData;
@@ -993,7 +1066,6 @@
         syncToCloud();
       }
 
-      // ===== 调整许愿券（管理员） =====
       function adjust(user, delta) {
         if (data[user] + delta < 0) return;
         const newData = JSON.parse(JSON.stringify(data));
@@ -1005,7 +1077,6 @@
         showNotification("✅ " + log);
       }
 
-      // ===== 管理员解锁 =====
       let adminUnlocked = false;
 
       function toggleAdminButtons() {
@@ -1037,24 +1108,64 @@
         }
       }
 
-      // ===== 渲染 =====
       function render() {
         try {
           document.getElementById("thomasCount").textContent = data.thomas;
           document.getElementById("aliceCount").textContent = data.baby;
 
+          // 日期计算
           const now = new Date();
-          const diff = ANNIVERSARY_DATE.getTime() - now.getTime();
-          const days = Math.ceil(diff / (1000 * 60 * 60 * 24));
-          let daysText = "";
-          if (days > 0) {
-            daysText = `❤️ 距离纪念日还有 ${days} 天`;
-          } else if (days === 0) {
-            daysText = "🎉 今天是我们结婚纪念日！ 🎉";
-          } else {
-            daysText = `💕 已相爱 ${Math.abs(days)} 天`;
+          const startDate = new Date(2025, 6, 15);
+          const daysTogether = Math.floor(
+            (now - startDate) / (1000 * 60 * 60 * 24),
+          );
+          const anniversaryMonth = startDate.getMonth();
+          const anniversaryDay = startDate.getDate();
+
+          let thisYearAnniversary = new Date(
+            now.getFullYear(),
+            anniversaryMonth,
+            anniversaryDay,
+          );
+          let nextAnniversary = new Date(
+            now.getFullYear(),
+            anniversaryMonth,
+            anniversaryDay,
+          );
+          if (now > thisYearAnniversary) {
+            nextAnniversary.setFullYear(now.getFullYear() + 1);
           }
-          document.getElementById("days").textContent = daysText;
+          const daysToNext = Math.ceil(
+            (nextAnniversary - now) / (1000 * 60 * 60 * 24),
+          );
+
+          const isAnniversary =
+            now.getMonth() === anniversaryMonth &&
+            now.getDate() === anniversaryDay;
+
+          let daysHtml = "";
+          if (isAnniversary) {
+            const anniversaryNumber =
+              now.getFullYear() - startDate.getFullYear();
+            daysHtml = `
+                <div style="font-size: 2rem; color: #ffd700; line-height: 1.4;">
+                    🎉 今天是我们结婚纪念日！ 🎉
+                    <div style="font-size: 1.2rem; opacity: 0.8; margin-top: 4px;">
+                        这是我们第 ${anniversaryNumber} 个结婚纪念日 💕
+                    </div>
+                </div>
+            `;
+          } else {
+            daysHtml = `
+                <div style="font-size: 1.5rem; line-height: 1.6;">
+                    💕 已相爱 ${daysTogether} 天
+                </div>
+                <div style="font-size: 1.2rem; opacity: 0.8; margin-top: 4px;">
+                    ❤️ 距离下一个结婚纪念日还有 ${daysToNext} 天
+                </div>
+            `;
+          }
+          document.getElementById("days").innerHTML = daysHtml;
 
           const historyEl = document.getElementById("history");
           if (data.history && data.history.length > 0) {
@@ -1075,7 +1186,6 @@
         }
       }
 
-      // ===== 愿望列表 =====
       function renderWishList() {
         const container = document.getElementById("wishListContainer");
         const wishes = data.wishes || [];
@@ -1154,7 +1264,6 @@
         showNotification(`✅ ${log}`);
       }
 
-      // ===== 弹窗 =====
       function openWish() {
         document.getElementById("wishModal").style.display = "flex";
       }
@@ -1170,7 +1279,6 @@
         document.getElementById("redeemCode").value = "";
       }
 
-      // ===== 提交愿望 =====
       function submitWish() {
         try {
           const user = currentUser;
@@ -1211,7 +1319,6 @@
         }
       }
 
-      // ===== 🔐 兑换码一次使用 =====
       function markCodeAsUsed(code) {
         return new Promise((resolve, reject) => {
           if (!isCloudReady || !db) {
@@ -1222,7 +1329,7 @@
           ref.transaction(
             (currentData) => {
               if (currentData && currentData[code]) {
-                return; // 已存在，不修改
+                return;
               }
               if (!currentData) currentData = {};
               currentData[code] = true;
@@ -1242,7 +1349,6 @@
         });
       }
 
-      // ===== 兑换码 =====
       let cachedCodes = null;
 
       function loadCodesFromCloud(callback) {
@@ -1284,14 +1390,12 @@
               return;
             }
 
-            // 快速检查是否已被使用
             db.ref("usedCodes/" + code).once("value", (snap) => {
               if (snap.exists()) {
                 alert("❌ 该兑换码已被使用");
                 return;
               }
 
-              // 原子标记
               markCodeAsUsed(code)
                 .then(() => {
                   const bonus = codes[code];
@@ -1321,7 +1425,6 @@
         }
       }
 
-      // ===== 重置 =====
       function resetAll() {
         if (
           confirm("⚠️ 确定要清除所有许愿券、愿望和历史记录吗？此操作不可撤销！")
@@ -1347,7 +1450,6 @@
         }
       }
 
-      // ===== 导出/导入 =====
       function exportData() {
         try {
           const raw = localStorage.getItem("loveBank");
@@ -1400,7 +1502,6 @@
         event.target.value = "";
       }
 
-      // ===== 飘落爱心 =====
       function createHeart() {
         const h = document.createElement("div");
         h.className = "heart";
@@ -1414,9 +1515,33 @@
         setTimeout(() => h.remove(), 12000);
       }
 
-      // ================================================================
-      // 🎨 动态背景
-      // ================================================================
+      function updateUserUI() {
+        const label = currentUser === "thomas" ? "Thomas" : "Alice";
+        const avatar = currentUser === "thomas" ? "T" : "A";
+        document.getElementById("userNameDisplay").textContent = label;
+        document.getElementById("userAvatar").textContent = avatar;
+        document.getElementById("wishUserDisplay").textContent = label;
+        document.getElementById("redeemUserDisplay").textContent = label;
+      }
+
+      function switchUser() {
+        const currentLabel = currentUser === "thomas" ? "Thomas" : "Alice";
+        const nextLabel = currentUser === "thomas" ? "Alice" : "Thomas";
+        if (
+          confirm(
+            `当前使用者：${currentLabel}\n点击确定切换为 ${nextLabel}，取消则不变。`,
+          )
+        ) {
+          const newUser = currentUser === "thomas" ? "baby" : "thomas";
+          saveUserToDevice(newUser);
+          showNotification(
+            `👤 已切换为 ${newUser === "thomas" ? "Thomas" : "Alice"}`,
+          );
+          render();
+        }
+      }
+
+      // 动态背景
       let bgCanvas,
         bgCtx,
         bgParticles = [];
@@ -1577,137 +1702,6 @@
         loop();
       }
 
-      // ================================================================
-      // 🍀 全屏幸运签（含点击背景跳过）
-      // ================================================================
-      const FORTUNES = [
-        "✨ 你的微笑是我每天最期待的风景。",
-        "💕 今天你比昨天更让我心动。",
-        "🌟 与你在一起的每一天都是礼物。",
-        "🌙 月光再美，也不及你眼眸的温柔。",
-        "🌸 愿你的心情如花开般灿烂。",
-        "🌻 你是我的太阳，温暖而明亮。",
-        "🍀 幸运的是，我们彼此拥有。",
-        "🌈 风雨过后，我们的彩虹更绚烂。",
-        "🎵 你是我心中永远的单曲循环。",
-        "💖 爱你，是我做过最正确的事。",
-        "🌹 你值得世间所有的美好。",
-        "⭐ 你的存在让我的世界闪闪发光。",
-        "☀️ 今天也要像阳光一样明媚哦！",
-        "🌊 我对你的爱，如潮水般永不褪去。",
-        "🍫 你是我最甜蜜的巧克力。",
-      ];
-
-      let countdownInterval = null;
-      let splashFadeTimeout = null;
-      let isSplashFading = false;
-
-      function showSplash() {
-        const overlay = document.getElementById("splashOverlay");
-        const fortuneEl = document.getElementById("splashFortuneText");
-        const countdownEl = document.getElementById("splashCountdown");
-
-        const randomIndex = Math.floor(Math.random() * FORTUNES.length);
-        fortuneEl.textContent = FORTUNES[randomIndex];
-
-        // 加载已保存身份
-        const savedUser = localStorage.getItem("loveBankUser_" + deviceId);
-        if (savedUser === "thomas" || savedUser === "baby") {
-          currentUser = savedUser;
-          document
-            .getElementById("identityThomas")
-            .classList.remove("selected");
-          document.getElementById("identityAlice").classList.remove("selected");
-          if (savedUser === "thomas") {
-            document.getElementById("identityThomas").classList.add("selected");
-          } else {
-            document.getElementById("identityAlice").classList.add("selected");
-          }
-        } else {
-          const old = localStorage.getItem("loveBankUser");
-          if (old === "thomas" || old === "baby") {
-            currentUser = old;
-            localStorage.setItem("loveBankUser_" + deviceId, currentUser);
-          }
-        }
-
-        overlay.style.opacity = "1";
-        overlay.style.pointerEvents = "auto";
-
-        // 倒计时
-        let seconds = 5;
-        countdownEl.textContent = seconds;
-        clearInterval(countdownInterval);
-        countdownInterval = setInterval(() => {
-          seconds--;
-          countdownEl.textContent = seconds;
-          if (seconds <= 0) {
-            clearInterval(countdownInterval);
-            if (!currentUser) {
-              currentUser = "thomas";
-              localStorage.setItem("loveBankUser_" + deviceId, "thomas");
-            }
-            fadeOutSplash();
-          }
-        }, 1000);
-
-        // 身份按钮
-        document.getElementById("identityThomas").onclick = function () {
-          clearInterval(countdownInterval);
-          selectIdentity("thomas");
-        };
-        document.getElementById("identityAlice").onclick = function () {
-          clearInterval(countdownInterval);
-          selectIdentity("baby");
-        };
-
-        // ===== 点击背景（遮罩本身）跳过 =====
-        overlay.addEventListener("click", function (e) {
-          // 如果点击的是遮罩本身（即点击了背景），而不是卡片内部
-          if (e.target === overlay) {
-            clearInterval(countdownInterval);
-            // 如果用户没有选择身份，则使用默认（上次或 Thomas）
-            if (!currentUser) {
-              currentUser = "thomas";
-              localStorage.setItem("loveBankUser_" + deviceId, "thomas");
-            }
-            fadeOutSplash();
-          }
-        });
-      }
-
-      function selectIdentity(user) {
-        clearTimeout(splashFadeTimeout);
-        currentUser = user;
-        localStorage.setItem("loveBankUser_" + deviceId, user);
-        localStorage.setItem("loveBankUser", user);
-        document.getElementById("identityThomas").classList.remove("selected");
-        document.getElementById("identityAlice").classList.remove("selected");
-        if (user === "thomas") {
-          document.getElementById("identityThomas").classList.add("selected");
-        } else {
-          document.getElementById("identityAlice").classList.add("selected");
-        }
-        setTimeout(() => {
-          fadeOutSplash();
-        }, 300);
-      }
-
-      function fadeOutSplash() {
-        if (isSplashFading) return;
-        isSplashFading = true;
-        const overlay = document.getElementById("splashOverlay");
-        overlay.classList.add("fade-out");
-        if (splashFadeTimeout) clearTimeout(splashFadeTimeout);
-        splashFadeTimeout = setTimeout(() => {
-          overlay.style.display = "none";
-          render();
-        }, 1000);
-      }
-
-      // ================================================================
-      // 管理员初始化
-      // ================================================================
       function initAdmin() {
         const saved = sessionStorage.getItem("adminUnlocked");
         if (saved === "1") {
@@ -1723,9 +1717,6 @@
           .addEventListener("dblclick", requestAdminAccess);
       }
 
-      // ================================================================
-      // 用户切换
-      // ================================================================
       function initUserSwitcher() {
         document
           .getElementById("userSwitcher")
@@ -1735,17 +1726,14 @@
           });
       }
 
-      // ================================================================
-      // 初始化
-      // ================================================================
-      function init() {
+      // ===== 主初始化函数（在开屏淡出后调用） =====
+      function initMain() {
         loadUserFromDevice();
-
-        showSplash();
-
         initBgCanvas();
         initAdmin();
         initUserSwitcher();
+
+        render();
 
         setInterval(createHeart, 1200);
 
@@ -1790,11 +1778,8 @@
         });
       }
 
-      if (document.readyState === "complete") {
-        init();
-      } else {
-        window.addEventListener("load", init);
-      }
+      // 启动开屏
+      showSplash();
     </script>
   </body>
 </html>
